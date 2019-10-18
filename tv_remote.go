@@ -16,8 +16,33 @@ func initRemoteTvConnection(remoteAddress string) {
 	reconnect()
 }
 
-func executeKeyPress(keyCode *string) string {
-	executeFunc := runCommandFunction(*keyCode)
+func executeLiteralCommand(command string) string {
+	var response string
+	switch command {
+	case "VOLUME_UP":
+		response = executeKeyPress("24")
+	case "VOLUME_DOWN":
+		response = executeKeyPress("25")
+	case "MUTE":
+		response = executeKeyPressNTimes("25", 15)
+	}
+	if response != "" {
+		fmt.Printf("Finished command [%v] execution. response=%v\n", command, response)
+		return response
+	}
+	return fmt.Sprintf("Command %v is not supported", command)
+}
+
+func executeKeyPressNTimes(keyCode string, n int) string {
+	var msg string
+	for i := 0; i < n; i++ {
+		msg = executeKeyPress(keyCode)
+	}
+	return msg
+}
+
+func executeKeyPress(keyCode string) string {
+	executeFunc := runCommandFunction(keyCode)
 	isDone, msg := executeFunc()
 	for !isDone {
 		fmt.Printf("Execution failed with message [%v]\n", msg)
@@ -25,7 +50,6 @@ func executeKeyPress(keyCode *string) string {
 		time.Sleep(500 * time.Millisecond)
 		isDone, msg = executeFunc()
 	}
-	fmt.Printf("Finished command [%v] execution isSuccess=%v msg=[%v]\n", *keyCode, isDone, msg)
 	return msg
 }
 
@@ -36,7 +60,7 @@ func runCommandFunction(keyCode string) func() (bool, string) {
 			return true, "Exhausted retry attempts"
 		}
 		retryCount++
-		err := executeKeyEvent(keyCode)
+		err := executeCommand(keyCode)
 		if err != nil {
 			return false, err.Error()
 		}
@@ -44,7 +68,7 @@ func runCommandFunction(keyCode string) func() (bool, string) {
 	}
 }
 
-func executeKeyEvent(keyCode string) error {
+func executeCommand(keyCode string) error {
 	cmd := exec.Command("adb", "shell", "input", "keyevent", keyCode)
 	return cmd.Run()
 }

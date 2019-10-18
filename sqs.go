@@ -44,11 +44,11 @@ func initQueueUrl() {
 }
 
 func pollAndProcess() {
-	chnMessages := make(chan *string)
+	chnMessages := make(chan *string, 10)
 	go pollSqs(chnMessages)
 
 	for message := range chnMessages {
-		executeKeyPress(message)
+		executeLiteralCommand(*message)
 	}
 }
 

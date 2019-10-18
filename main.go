@@ -9,20 +9,21 @@ import (
 )
 
 func main() {
-	go startSqs()
 	initRemoteTvConnection(os.Args[1])
-	startWeb()
+	go startSqs()
+	startRest()
 }
 
-func startWeb() {
+func startRest() {
 	router := gin.Default()
 	router.POST("/v1/events/", runCommand)
 	router.Run(":11002")
 }
 
 func runCommand(c *gin.Context) {
-	body := string(getBody(c))
-	msg := executeKeyPress(&body)
+	bodyBytes := getBody(c)
+	body := string(bodyBytes)
+	msg := executeLiteralCommand(body)
 	c.String(http.StatusOK, msg)
 }
 
