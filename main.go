@@ -3,12 +3,14 @@ package main
 import (
 	"bytes"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	go startSqs()
+	initRemoteTvConnection(os.Args[1])
 	startWeb()
 }
 

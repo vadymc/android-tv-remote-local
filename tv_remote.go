@@ -6,20 +6,23 @@ import (
 	"time"
 )
 
-const (
-	disconnectedError = "exit status 255"
-	androidTvAddress  = "192.168.1.99:5555"
-)
+var androidTvAddress string
+
+func initRemoteTvConnection(remoteAddress string) {
+	if remoteAddress == "" {
+		panic("Specify Android TV address and port")
+	}
+	androidTvAddress = remoteAddress
+	reconnect()
+}
 
 func executeKeyPress(keyCode *string) string {
 	executeFunc := runCommandFunction(*keyCode)
 	isDone, msg := executeFunc()
 	for !isDone {
 		fmt.Printf("Execution failed with message [%v]\n", msg)
-		if msg == disconnectedError {
-			reconnect()
-			time.Sleep(500 * time.Millisecond)
-		}
+		reconnect()
+		time.Sleep(500 * time.Millisecond)
 		isDone, msg = executeFunc()
 	}
 	fmt.Printf("Finished command [%v] execution isSuccess=%v msg=[%v]\n", *keyCode, isDone, msg)
@@ -52,8 +55,8 @@ func reconnect() {
 
 	connectCmd := exec.Command("adb", "connect", androidTvAddress)
 	if err := connectCmd.Run(); err != nil {
-		fmt.Printf("Failed to connect to Android TV [%v]", err.Error())
+		fmt.Printf("Failed to connect to Android TV [%v]\n", err.Error())
 	} else {
-		fmt.Println("Connected to Android TV")
+		fmt.Println("Connected to Android TV\n")
 	}
 }
