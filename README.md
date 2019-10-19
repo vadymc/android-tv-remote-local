@@ -1,6 +1,6 @@
 # android-tv-remote-local
 
-App for local network that controls Android TV by executing remote `adb` key event commands. Can be triggered by REST call from local network or by AWS SQS event.
+App for local network that controls Android TV by executing remote `adb` key event commands. Can be triggered by REST call from local network or by AWS SQS event from [AWS Lambda](https://github.com/vadymc/android-tv-remote-lambda).
 
 ##### Requires:
  * `adb` present in PATH
