@@ -107,6 +107,7 @@ func getKeyPressCount(inputParams []string) int {
 }
 
 func parseString(s string) int {
+	if s == "" {return 0}
 	i, err := strconv.Atoi(s)
 	if err != nil {
 		log.Fatalf("Failed to parse string [%v] to int. Error %v", s, err)
