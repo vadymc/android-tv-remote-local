@@ -69,7 +69,7 @@ func executeKeyPress(keyCode string) string {
 func runCommandFunction(keyCode string) func() (bool, string) {
 	retryCount := 0
 	return func() (bool, string) {
-		if retryCount > 1 {
+		if retryCount > 4 {
 			return true, "Exhausted retry attempts"
 		}
 		retryCount++
@@ -107,7 +107,9 @@ func getKeyPressCount(inputParams []string) int {
 }
 
 func parseString(s string) int {
-	if s == "" {return 0}
+	if s == "" {
+		return 0
+	}
 	i, err := strconv.Atoi(s)
 	if err != nil {
 		log.Fatalf("Failed to parse string [%v] to int. Error %v", s, err)
