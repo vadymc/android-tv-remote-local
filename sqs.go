@@ -57,7 +57,7 @@ func pollSqs(chn chan<- *string) {
 		output, err := sqsClient.ReceiveMessage(&sqs.ReceiveMessageInput{
 			QueueUrl:            queueUrl,
 			MaxNumberOfMessages: aws.Int64(10),
-			WaitTimeSeconds:     aws.Int64(0),
+			WaitTimeSeconds:     aws.Int64(20),
 		})
 
 		if err != nil {
