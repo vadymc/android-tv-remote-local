@@ -37,7 +37,7 @@ func initQueueUrl() {
 	})
 
 	if err != nil {
-		log.Fatalf("Error", err)
+		log.Fatalf("Error %v", err)
 		return
 	}
 	queueUrl = result.QueueUrl
@@ -78,6 +78,6 @@ func deleteMessage(message *sqs.Message) {
 		ReceiptHandle: message.ReceiptHandle,
 	})
 	if err != nil {
-		log.Fatalf("Error", err)
+		log.Fatalf("Error %v", err)
 	}
 }

@@ -94,7 +94,7 @@ func reconnect() {
 	if err := connectCmd.Run(); err != nil {
 		fmt.Printf("Failed to connect to Android TV [%v]\n", err.Error())
 	} else {
-		fmt.Println("Connected to Android TV\n")
+		fmt.Println("Connected to Android TV")
 	}
 }
 
